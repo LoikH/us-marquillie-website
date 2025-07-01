@@ -3,34 +3,41 @@
 import { Container, Card, Row, Col } from "react-bootstrap";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface Article {
   id: number;
   documentId: string;
   Titre: string;
-  Contenu: string;
+  Contenu: any; // Le contenu riche est un objet complexe
   DatePublication: string;
-}
-
-interface Competition {
-  id: number;
-  Nom: string;
-  equipe: {
-    Nom: string;
+  ImagePrincipale: {
+    url: string;
+    width: number;
+    height: number;
   };
 }
 
-interface Match {
-  id: number;
-  EquipeDomicile: string;
-  EquipeExterieur: string;
-  DateMatch: string;
-  HeureMatch: string;
-  competition: {
-    id: number;
-  };
-  EstJoue: boolean;
-}
+// Fonction pour rendre un extrait du contenu riche
+const renderRichTextExcerpt = (content: any, maxLength: number = 150) => {
+  if (!content || !Array.isArray(content)) {
+    return "";
+  }
+  let excerpt = "";
+  for (const block of content) {
+    if (block.type === 'paragraph' && block.children && block.children.length > 0) {
+      for (const child of block.children) {
+        if (child.type === 'text') {
+          excerpt += child.text;
+          if (excerpt.length >= maxLength) {
+            return excerpt.substring(0, maxLength) + '...';
+          }
+        }
+      }
+    }
+  }
+  return excerpt;
+};
 
 export default function Home() {
   const [latestArticles, setLatestArticles] = useState<Article[]>([]);
@@ -38,7 +45,7 @@ export default function Home() {
   const [prochainsMatchs, setProchainsMatchs] = useState<Match[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:1337/api/articles?sort=DatePublication:desc&pagination[limit]=2')
+    axios.get('http://localhost:1337/api/articles?sort=DatePublication:desc&pagination[limit]=2&populate=ImagePrincipale')
       .then(response => {
         setLatestArticles(response.data.data);
       })
@@ -79,8 +86,24 @@ export default function Home() {
               {latestArticles.map(article => (
                 <Card className="mb-3" key={article.id}>
                   <Card.Body>
-                    <Card.Title>{article.Titre}</Card.Title>
-                    <Card.Link href={`/actualites/${article.documentId}`}>Lire la suite</Card.Link>
+                    <Row>
+                      {article.ImagePrincipale && (
+                        <Col xs={4} md={3}>
+                          <Image
+                            src={`http://localhost:1337${article.ImagePrincipale.url}`}
+                            alt={article.Titre}
+                            width={100}
+                            height={100}
+                            objectFit="cover"
+                          />
+                        </Col>
+                      )}
+                      <Col>
+                        <Card.Title>{article.Titre}</Card.Title>
+                        <Card.Text>{renderRichTextExcerpt(article.Contenu)}</Card.Text>
+                        <Card.Link href={`/actualites/${article.documentId}`}>Lire la suite</Card.Link>
+                      </Col>
+                    </Row>
                   </Card.Body>
                 </Card>
               ))}
@@ -127,4 +150,5 @@ export default function Home() {
     </>
   );
 }
+
 

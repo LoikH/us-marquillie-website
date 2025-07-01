@@ -6,6 +6,7 @@ import "./navbar.css"; // Importez le CSS de la barre de navigation ici
 
 import Navigation from "./components/Navigation";
 import Image from 'next/image';
+import { Container } from "react-bootstrap";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,32 +31,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
         <script async src="https://www.tiktok.com/embed.js"></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navigation />
-        <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
-          <Image
-            src="/images/banniere.png"
-            alt="Bannière du club US Marquillie"
-            layout="responsive"
-            width={800} // Nouvelle largeur de la bannière
-            height={150} // Nouvelle hauteur de la bannière
-            quality={100}
-            objectFit="contain"
-          />
-          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 10, textAlign: 'center' }}>
-            <Image
-              src="/images/logo.jpg"
-              alt="Logo du club US Marquillie"
-              width={100}
-              height={100}
-            />
+        <Container>
+          <div style={{ position: 'relative', width: '100%', height: '250px', backgroundImage: 'url(/images/banniere.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
           </div>
-        </div>
-        <div style={{ paddingTop: '30px' }}>{children}</div> {/* Ajustement du padding-top */}
+          <Navigation />
+          <div style={{ backgroundColor: '#F8F8F8', padding: '20px', minHeight: 'calc(100vh - 250px - 56px)' }}>{children}</div> {/* 56px est la hauteur par défaut de la navbar Bootstrap */}
+        </Container>
       </body>
     </html>
   );
