@@ -1,0 +1,12 @@
+.navbar-custom {
+  background-color: transparent !important; /* Rendre la barre transparente */
+  position: absolute; /* Positionner en haut de la page */
+  width: 100%; /* Occuper toute la largeur */
+  z-index: 1000; /* Assurer qu'elle est au-dessus des autres éléments */
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+  color: white !important; /* Assurer que le texte reste blanc */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7); /* Ajouter une ombre pour la lisibilité */
+}

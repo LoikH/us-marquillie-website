@@ -1,0 +1,5 @@
+.banniere-container {
+  max-width: 1200px; /* Largeur maximale de la bannière */
+  margin: 0 auto; /* Centrer la bannière */
+  padding: 15px 0;
+}
