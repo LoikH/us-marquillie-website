@@ -5,6 +5,12 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
+declare global {
+  interface Window {
+    tiktokEmbed: any; // Déclare la propriété tiktokEmbed sur l'objet window
+  }
+}
+
 interface Article {
   id: number;
   documentId: string;
@@ -45,7 +51,7 @@ export default function Home() {
   const [prochainsMatchs, setProchainsMatchs] = useState<Match[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:1337/api/articles?sort=DatePublication:desc&pagination[limit]=2&populate=ImagePrincipale')
+    axios.get(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/articles?sort=DatePublication:desc&pagination[limit]=2&populate=ImagePrincipale`)
       .then(response => {
         setLatestArticles(response.data.data);
       })
@@ -68,16 +74,21 @@ export default function Home() {
       .catch(error => {
         console.error('Erreur lors de la récupération des prochains matchs:', error);
       });
+
+    // Exécuter le script TikTok après le rendu du composant
+    if (window.tiktokEmbed) {
+      window.tiktokEmbed.load();
+    }
   }, []);
 
   return (
     <>
       <main>
         <Container className="mt-4">
-          <Row className="align-items-center mb-4">
+          <Row className="align-items-center mb-4 text-center py-5">
             <Col md={12}>
-              <h1>Bienvenue à l'US MARQUILLIES</h1>
-              <p>Le club de football passionné de votre région !</p>
+              <h1 style={{ fontSize: '3rem', fontWeight: 'bold', color: 'var(--primary-blue)' }}>Bienvenue à l'US MARQUILLIES</h1>
+              <p style={{ fontSize: '1.2rem', color: '#555' }}>Le club de football passionné de votre région !</p>
             </Col>
           </Row>
           <Row>

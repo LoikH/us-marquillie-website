@@ -50,7 +50,7 @@ export default function Equipes() {
   const [equipes, setEquipes] = useState<Equipe[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:1337/api/equipes?populate=Photo')
+    axios.get(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/equipes?populate=Photo`)
       .then(response => {
         setEquipes(response.data.data);
       })

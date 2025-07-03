@@ -45,7 +45,7 @@ export default function Club() {
   const [clubData, setClubData] = useState<ClubData | null>(null);
 
   useEffect(() => {
-    axios.get('http://localhost:1337/api/club')
+    axios.get(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/club`)
       .then(response => {
         setClubData(response.data.data);
       })

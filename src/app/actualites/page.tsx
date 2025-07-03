@@ -53,7 +53,7 @@ export default function Actualites() {
 
   useEffect(() => {
     setIsClient(true);
-    axios.get('http://localhost:1337/api/articles?sort=DatePublication:desc&populate=ImagePrincipale')
+    axios.get(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/articles?sort=DatePublication:desc&populate=ImagePrincipale`)
       .then(response => {
         setArticles(response.data.data);
       })

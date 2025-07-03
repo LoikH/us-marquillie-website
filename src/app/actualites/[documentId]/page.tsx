@@ -56,7 +56,7 @@ export default function ArticlePage() {
 
   useEffect(() => {
     if (documentId) {
-      axios.get(`http://localhost:1337/api/articles/${documentId}?populate=ImagePrincipale`)
+      axios.get(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/articles/${documentId}?populate=ImagePrincipale`)
         .then(response => {
           setArticle(response.data.data);
         })

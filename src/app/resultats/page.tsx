@@ -72,7 +72,7 @@ export default function Resultats() {
         console.error('Erreur lors de la récupération des matchs:', error);
       });
 
-    axios.get('http://localhost:1337/api/classements?populate=competition&sort=Position:asc')
+    axios.get(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/classements?populate=competition&sort=Position:asc`)
       .then(response => {
         setClassements(response.data.data);
       })
