@@ -7,15 +7,33 @@ import Image from 'next/image';
 
 declare global {
   interface Window {
-    tiktokEmbed: any; // Déclare la propriété tiktokEmbed sur l'objet window
+    tiktokEmbed: { 
+      load: () => void; 
+      loadAll: () => void; 
+      loadDeferred: () => void; 
+      loadDeferredAll: () => void; 
+      loadDeferredAllIframes: () => void; 
+      loadDeferredIframes: () => void; 
+      loadIframes: () => void; 
+      loadAllIframes: () => void; 
+    }; 
   }
+}
+
+interface StrapiBlock {
+  type: string;
+  children: {
+    type: string;
+    text: string;
+  }[];
+  level?: number; // Ajout de la propriété optionnelle 'level' pour les titres
 }
 
 interface Article {
   id: number;
   documentId: string;
   Titre: string;
-  Contenu: any; // Le contenu riche est un objet complexe
+  Contenu: StrapiBlock[];
   DatePublication: string;
   ImagePrincipale: {
     url: string;
@@ -24,8 +42,28 @@ interface Article {
   };
 }
 
+interface Competition {
+  id: number;
+  Nom: string;
+  equipe: {
+    Nom: string;
+  };
+}
+
+interface Match {
+  id: number;
+  EquipeDomicile: string;
+  EquipeExterieur: string;
+  DateMatch: string;
+  HeureMatch: string;
+  competition: {
+    id: number;
+  };
+  EstJoue: boolean;
+}
+
 // Fonction pour rendre un extrait du contenu riche
-const renderRichTextExcerpt = (content: any, maxLength: number = 150) => {
+const renderRichTextExcerpt = (content: StrapiBlock[], maxLength: number = 150) => {
   if (!content || !Array.isArray(content)) {
     return "";
   }
@@ -59,7 +97,7 @@ export default function Home() {
         console.error('Erreur lors de la récupération des derniers articles:', error);
       });
 
-    axios.get('http://localhost:1337/api/competitions?populate=equipe')
+    axios.get(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/competitions?populate=equipe`)
       .then(response => {
         setCompetitions(response.data.data);
       })
@@ -67,28 +105,23 @@ export default function Home() {
         console.error('Erreur lors de la récupération des compétitions:', error);
       });
 
-    axios.get('http://localhost:1337/api/matches?filters[EstJoue][$eq]=false&sort=DateMatch:asc&populate=competition')
+    axios.get(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/matches?filters[EstJoue][$eq]=false&sort=DateMatch:asc&populate=competition`)
       .then(response => {
         setProchainsMatchs(response.data.data);
       })
       .catch(error => {
         console.error('Erreur lors de la récupération des prochains matchs:', error);
       });
-
-    // Exécuter le script TikTok après le rendu du composant
-    if (window.tiktokEmbed) {
-      window.tiktokEmbed.load();
-    }
   }, []);
 
   return (
     <>
       <main>
         <Container className="mt-4">
-          <Row className="align-items-center mb-4 text-center py-5">
+          <Row className="align-items-center mb-4">
             <Col md={12}>
-              <h1 style={{ fontSize: '3rem', fontWeight: 'bold', color: 'var(--primary-blue)' }}>Bienvenue à l'US MARQUILLIES</h1>
-              <p style={{ fontSize: '1.2rem', color: '#555' }}>Le club de football passionné de votre région !</p>
+              <h1>Bienvenue à l&apos;US MARQUILLIES</h1>
+              <p>Le club de football passionné de votre région !</p>
             </Col>
           </Row>
           <Row>
@@ -101,7 +134,7 @@ export default function Home() {
                       {article.ImagePrincipale && (
                         <Col xs={4} md={3}>
                           <Image
-                            src={`http://localhost:1337${article.ImagePrincipale.url}`}
+                            src={`${process.env.NEXT_PUBLIC_STRAPI_API_URL}${article.ImagePrincipale.url}`}
                             alt={article.Titre}
                             width={100}
                             height={100}
@@ -161,5 +194,6 @@ export default function Home() {
     </>
   );
 }
+
 
 

@@ -6,11 +6,20 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 
+interface StrapiBlock {
+  type: string;
+  children: {
+    type: string;
+    text: string;
+  }[];
+  level?: number; // Ajout de la propriété optionnelle 'level' pour les titres
+}
+
 interface Article {
   id: number;
   documentId: string;
   Titre: string;
-  Contenu: any; // Le contenu riche est un objet complexe
+  Contenu: StrapiBlock[];
   DatePublication: string;
   ImagePrincipale: {
     url: string;
@@ -20,7 +29,7 @@ interface Article {
 }
 
 // Fonction pour rendre le contenu riche de Strapi
-const renderRichText = (content: any) => {
+const renderRichText = (content: StrapiBlock[]) => {
   if (!content || !Array.isArray(content)) {
     return null;
   }
@@ -28,20 +37,17 @@ const renderRichText = (content: any) => {
   return content.map((block, index) => {
     switch (block.type) {
       case 'paragraph':
-        return <p key={index}>{block.children.map((child: any, i: number) => {
-          if (child.type === 'text') {
-            return <span key={i}>{child.text}</span>;
-          }
-          return null;
-        })}</p>;
+        return <p key={index}>{block.children.map((child) => child.text)}</p>;
       case 'heading':
-        const HeadingTag = `h${block.level}` as keyof JSX.IntrinsicElements;
-        return <HeadingTag key={index}>{block.children.map((child: any, i: number) => {
-          if (child.type === 'text') {
-            return <span key={i}>{child.text}</span>;
-          }
-          return null;
-        })}</HeadingTag>;
+        switch (block.level) {
+          case 1: return <h1 key={index}>{block.children.map((child) => child.text)}</h1>;
+          case 2: return <h2 key={index}>{block.children.map((child) => child.text)}</h2>;
+          case 3: return <h3 key={index}>{block.children.map((child) => child.text)}</h3>;
+          case 4: return <h4 key={index}>{block.children.map((child) => child.text)}</h4>;
+          case 5: return <h5 key={index}>{block.children.map((child) => child.text)}</h5>;
+          case 6: return <h6 key={index}>{block.children.map((child) => child.text)}</h6>;
+          default: return <p key={index}>{block.children.map((child) => child.text)}</p>;
+        }
       // Ajoutez d'autres types de blocs (list, image, etc.) si nécessaire
       default:
         return null;

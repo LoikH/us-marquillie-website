@@ -3,7 +3,6 @@
 import { Container, Table, Row, Col } from "react-bootstrap";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 
 interface Competition {
   id: number;

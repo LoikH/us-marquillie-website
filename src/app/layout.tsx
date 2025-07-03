@@ -5,7 +5,6 @@ import "./globals.css";
 import "./navbar.css"; // Importez le CSS de la barre de navigation ici
 
 import Navigation from "./components/Navigation";
-import Image from 'next/image';
 import { Container } from "react-bootstrap";
 
 const geistSans = Geist({
