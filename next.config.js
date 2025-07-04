@@ -8,6 +8,11 @@ const nextConfig = {
         port: '1337',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'healing-passion-14af921bbf.media.strapiapp.com',
+        pathname: '/**',
+      },
     ],
   },
 };

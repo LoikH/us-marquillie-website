@@ -134,7 +134,7 @@ export default function Home() {
                       {article.ImagePrincipale && (
                         <Col xs={4} md={3}>
                           <Image
-                            src={article.ImagePrincipale.url}
+                                                        src={article.ImagePrincipale.url}
                             alt={article.Titre}
                             width={100}
                             height={100}

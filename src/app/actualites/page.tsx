@@ -86,7 +86,7 @@ export default function Actualites() {
                   {article.ImagePrincipale && (
                     <div className="mb-3">
                       <Image
-                        src={article.ImagePrincipale.url}
+                                              src={article.ImagePrincipale.url}
                         alt={article.Titre}
                         width={600}
                         height={400}

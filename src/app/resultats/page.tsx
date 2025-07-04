@@ -55,7 +55,7 @@ export default function Resultats() {
   const [classements, setClassements] = useState<Classement[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:1337/api/competitions?populate=equipe')
+    axios.get(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/competitions?populate=equipe`)
       .then(response => {
         setCompetitions(response.data.data);
       })
