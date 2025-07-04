@@ -77,7 +77,7 @@ export default function Equipes() {
                 {equipe.Photo && (
                   <div className="text-center mb-3">
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_STRAPI_API_URL}${equipe.Photo.url}`}
+                      src={equipe.Photo.url}
                       alt={`Logo ${equipe.Nom}`}
                       width={equipe.Photo.width}
                       height={equipe.Photo.height}

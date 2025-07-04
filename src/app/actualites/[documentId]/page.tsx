@@ -89,7 +89,7 @@ export default function ArticlePage() {
             <Col md={4}>
               {article.ImagePrincipale && (
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_STRAPI_API_URL}${article.ImagePrincipale.url}`}
+                  src={article.ImagePrincipale.url}
                   alt={article.Titre}
                   width={article.ImagePrincipale.width}
                   height={article.ImagePrincipale.height}
