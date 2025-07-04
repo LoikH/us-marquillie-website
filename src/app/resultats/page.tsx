@@ -63,7 +63,7 @@ export default function Resultats() {
         console.error('Erreur lors de la récupération des compétitions:', error);
       });
 
-    axios.get('http://localhost:1337/api/matches?populate[0]=ImageMatch&populate[1]=competition')
+    axios.get(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/api/matches?populate[0]=ImageMatch&populate[1]=competition`)
       .then(response => {
         setMatches(response.data.data);
       })
